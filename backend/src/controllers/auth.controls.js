@@ -1,4 +1,5 @@
 import { emailRegex, passwordRegex } from "../constants.js";
+import { createStreamUser } from "../lib/stream.js";
 import { User } from "../models/User.model.js";
 import jwt from "jsonwebtoken";
 
@@ -32,7 +33,7 @@ export const signUpUser = async (req, res) => {
 
     const avatar = `https://avatar.iran.liara.run/username?username=${
       fullName.split(" ")[0]
-    }+${fullName.split(" ")[1] || fullName.split(' ')[0][1].toUpperCase()}.png`;
+    }+${fullName.split(" ")[1] || fullName.split(" ")[0][1].toUpperCase()}.png`;
 
     const newUser = await User.create({
       fullName,
@@ -40,6 +41,18 @@ export const signUpUser = async (req, res) => {
       password,
       profilePic: avatar,
     });
+
+    try {
+      await createStreamUser({
+        id: newUser._id.toString(),
+        name: newUser.fullName,
+        image: newUser.profilePic || "",
+      });
+
+      console.log(`Stream created for user ${newUser._id}`);
+    } catch (error) {
+      console.log("Error occured while creating stream for user", error);
+    }
 
     const token = jwt.sign(
       {
@@ -56,17 +69,64 @@ export const signUpUser = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
     });
 
-    res.status(201).json({ success: true, user: newUser });
+    res
+      .status(201)
+      .json({
+        success: true,
+        user: newUser,
+        message: "Signed out successfully!",
+      });
   } catch (error) {
     console.log("Error in controller", error);
-    return res.status(500).json({ error: "Failed to register the user!" });
+    return res.status(500).json({ error: "Internal Server Error." });
   }
 };
 
 export const signInUser = async (req, res) => {
-  res.send("Sign-in");
+  try {
+    const { email, password } = req.body;
+
+    if ([email, password].some((e) => e.trim() === "")) {
+      return res.status(400).json({ error: "All fields are required!" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(409)
+        .json({ error: "New user detected! Try signing up." });
+    }
+
+    const checkPassword = await user.isPasswordCorrect(password);
+    if (!checkPassword) {
+      return res.status(409).json({ error: "Inavalid password! Try again." });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    res.cookie("jwt", {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    return res
+      .status(200)
+      .json({ success: true, user, message: "Signed in successfully!" });
+  } catch (error) {
+    console.log("Error in sign in controller", error);
+    return res.status(500).json({ error: "Internal Server Error." });
+  }
 };
 
 export const signOutUser = async (req, res) => {
-  res.send("Sign-out");
+  try {
+    res.clearCookie("jwt");
+    return res
+      .status(200)
+      .json({ success: true, message: "Signed out successfully!" });
+  } catch (error) {}
 };

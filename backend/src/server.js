@@ -1,7 +1,7 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 import authRoutes from "./routes/auth.routes.js";
-import {connectDB} from "./lib/db.js"
+import { connectDB } from "./lib/db.js";
 
 dotenv.config({ path: "./.env.local" });
 const app = express();
@@ -16,8 +16,8 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`http://localhost:${port}`);
-  connectDB();
+  await connectDB();
   console.log("server is up!");
 });
