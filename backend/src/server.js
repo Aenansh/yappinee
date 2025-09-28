@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import authRoutes from "./routes/auth.routes.js";
 import { connectDB } from "./lib/db.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config({ path: "./.env.local" });
 const app = express();
@@ -13,6 +14,8 @@ app.use(
     limit: "100kb",
   })
 );
+
+app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 
