@@ -1,7 +1,7 @@
 import { StreamChat } from "stream-chat";
 import dotenv from "dotenv";
 
-dotenv.config({path: "./.env.local"})
+dotenv.config({ path: "./.env.local" });
 
 const apiKey = process.env.STREAM_API_KEY;
 const apiSecret = process.env.STREAM_API_SECRET;
@@ -20,4 +20,11 @@ export const createStreamUser = async (userData) => {
   }
 };
 
-export const generateStreamToken = async (userId) => {};
+export const generateStreamToken = (userId) => {
+  try {
+    const userIdString = userId.toString();
+    return streamClient.createToken(userIdString);
+  } catch (error) {
+    console.log("Error occured in generating token", error);
+  }
+};

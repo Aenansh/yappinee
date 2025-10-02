@@ -29,6 +29,7 @@ export const connectDB = async () => {
   } catch (error) {
     cached.conn = null;
     cached.promise = null;
-    throw new Error(error.mongoose);
+    console.log("Failed to connect to db", error);
+    process.exit(0);
   }
 };

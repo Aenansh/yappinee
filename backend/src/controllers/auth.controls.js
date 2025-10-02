@@ -75,7 +75,7 @@ export const signUpUser = async (req, res) => {
       message: "Signed Up successfully!",
     });
   } catch (error) {
-    console.log("Error in controller", error);
+    console.log("Error in sign up controller", error);
     return res.status(500).json({ error: "Internal Server Error." });
   }
 };
@@ -184,5 +184,8 @@ export const onBoardUser = async (req, res) => {
       user: updatedUser,
       message: "Successfully Onboarded!",
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error occured in onboarding user controller", error);
+    return res.status(500).json({ error: "Internal Server Error." });
+  }
 };
