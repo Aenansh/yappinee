@@ -3,7 +3,6 @@ import useAuthUser from "../src/hooks/auth.hook";
 import { useSignOutUser } from "../src/hooks/signout.hook";
 import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
-import 'stream-chat-react/dist/css/v2/index.css';
 
 const Navbar = () => {
   const { authUser } = useAuthUser();
