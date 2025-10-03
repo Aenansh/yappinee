@@ -3,11 +3,11 @@ import { PaletteIcon } from "lucide-react";
 import { THEMES } from "../src/constants/index";
 
 const ThemeSelector = () => {
-  const { theme, setTheme } = useThemeStore();
+  const { theme: currTheme, setTheme } = useThemeStore();
   return (
     <div className="dropdown dropdown-end">
       <button className="btn btn-ghost btn-circle" tabIndex={0}>
-        <PaletteIcon className="size-5" />
+        <PaletteIcon className="size-7" />
       </button>
 
       <div
@@ -19,7 +19,7 @@ const ThemeSelector = () => {
             <button
               key={theme.name}
               className={`w-full px-4 py3 rounded-xl flex items-center gap-3 transition-colors ${
-                theme === theme.name
+                currTheme === theme.name
                   ? "bg-primary/10 text-primary"
                   : "hover:bg-base-content/5"
               }`}

@@ -71,10 +71,10 @@ function App() {
             }
           />
           <Route
-            path="/chat"
+            path="/chat/:id"
             element={
               isAuthenticated && isOnboarded ? (
-                <Layout>
+                <Layout showSideBar={false}>
                   <ChatPage />
                 </Layout>
               ) : (

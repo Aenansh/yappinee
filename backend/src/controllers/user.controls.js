@@ -101,7 +101,7 @@ export const acceptFriendRequest = async (req, res) => {
     await friendRequest.save();
 
     await User.findByIdAndUpdate(friendRequest.recipient, {
-      $addToSet: { friends: friendRequest.sender },
+      $addToSet: { friends: friendRequest.sender }, 
     });
     await User.findByIdAndUpdate(friendRequest.sender, {
       $addToSet: { friends: friendRequest.recipient },
@@ -125,9 +125,9 @@ export const fetchAllRequests = async (req, res) => {
     );
 
     const acceptedRequests = await FriendRequest.find({
-      recipient: req.user._id,
+      sender: req.user._id,
       status: "accepted",
-    }).populate("sender", "fullName profilePic");
+    }).populate("recipient", "fullName profilePic");
 
     return res.status(200).json({ allRequests, acceptedRequests });
   } catch (error) {
