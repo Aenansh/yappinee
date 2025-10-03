@@ -3,6 +3,7 @@ import useAuthUser from "../src/hooks/auth.hook";
 import { useSignOutUser } from "../src/hooks/signout.hook";
 import { BellIcon, LogOutIcon, ShipWheelIcon } from "lucide-react";
 import ThemeSelector from "./ThemeSelector";
+import 'stream-chat-react/dist/css/v2/index.css';
 
 const Navbar = () => {
   const { authUser } = useAuthUser();
@@ -14,13 +15,20 @@ const Navbar = () => {
   return (
     <>
       <nav className="bg-base-200 border-b border-base-300 sticky top-0 z-30 h-16 flex items-center px-4 lg:px-6">
+        {!isChatPage && (
+          <div className="p-5 border-b border-base-300 flex lg:hidden">
+            <Link className="flex items-center gap-2.5" to={"/"}>
+              <ShipWheelIcon className="size-9 text-primary" />
+            </Link>
+          </div>
+        )}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-end w-full">
             {isChatPage && (
-              <div className="pl-5 hidden sm:inline-block">
+              <div className="pl-5">
                 <Link to={"/"} className="flex items-center gap-2.5">
                   <ShipWheelIcon className="size-9 text-primary" />
-                  <span className="text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
+                  <span className="text-3xl  hidden sm:inline-block font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-wider">
                     Yappinee
                   </span>
                 </Link>
