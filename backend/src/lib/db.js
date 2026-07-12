@@ -31,5 +31,5 @@ export const connectDB = async () => {
     cached.promise = null;
     console.log("Failed to connect to db", error);
     process.exit(0);
-  }
+  } 
 };

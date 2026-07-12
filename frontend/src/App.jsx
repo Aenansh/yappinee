@@ -7,10 +7,11 @@ import OnboardingPage from "./pages/OnboardingPage";
 import ChatPage from "./pages/ChatPage";
 import CallPage from "./pages/CallPage";
 import NotificationsPage from "./pages/NotificationsPage";
-import Loading from "../components/loading.jsx";
+import Loading from "../components/Loading.jsx";
 import useAuthUser from "./hooks/auth.hook.js";
 import Layout from "../components/Layout.jsx";
 import { useThemeStore } from "./store/useThemeStore.js";
+import FriendsPage from "./pages/FriendsPage.jsx";
 
 function App() {
   const { authUser, isLoading } = useAuthUser();
@@ -104,8 +105,19 @@ function App() {
               )
             }
           />
+          <Route
+            path="/friends"
+            element={
+              authUser ? (
+                <Layout showSideBar>
+                  <FriendsPage />
+                </Layout>
+              ) : (
+                <Navigate to={"/sign-in"} />
+              )
+            }
+          />
         </Routes>
-
         <Toaster />
       </div>
     </>
